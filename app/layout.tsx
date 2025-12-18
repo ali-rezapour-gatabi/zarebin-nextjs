@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { LayoutWrapper } from '@/components/layout-wrapper';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { ThemeChecker } from '@/lib/theme-checker';
 
 export const metadata: Metadata = {
   title: 'Chat UI',
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
       <body className={` min-h-screen antialiased bg-background text-foreground`}>
+        <ThemeChecker />
         <SidebarProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
         </SidebarProvider>

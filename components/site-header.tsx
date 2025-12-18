@@ -40,7 +40,6 @@ export function SiteHeader() {
   const headerOffset = !hasSidebar || isMobile ? undefined : open ? 'var(--sidebar-width)' : 'var(--sidebar-width-icon)';
   const isDashboard = pathname.startsWith('/dashboard');
   const showHamburger = !isDashboard;
-  const showLogo = isDashboard;
 
   return (
     <header className="sticky top-0 z-10 via-card/95 to-background/90 backdrop-blur-xl transition-[padding-right] duration-300 ease-in-out" style={{ paddingRight: headerOffset }}>
@@ -58,20 +57,21 @@ export function SiteHeader() {
             </Button>
           )}
 
-          {showLogo && (
-            <Link
-              href="/"
-              className="group flex items-center gap-3 rounded-2xl md:border border-border/70 px-3 py-2 shadow-xs transition duration-200 hover:-translate-y-0.5 hover:shadow-sm"
-            >
-              <span className="grid size-11 place-items-center rounded-2xl bg-gradient-to-br from-primary to-chart-2 text-primary-foreground shadow">
-                <MessageCircle className="size-5" />
-              </span>
-              <span className="leading-tight hidden md:block">
-                <p className="text-sm font-semibold">زاربین</p>
-                <p className="text-[11px] text-muted-foreground">همراه هوش و انسان برای راهنمایی سریع</p>
-              </span>
-            </Link>
-          )}
+          <Link
+            href="/"
+            className={
+              'group flex items-center gap-3 rounded-2xl md:border border-border/70 px-3 py-2 shadow-xs transition duration-200 hover:-translate-y-0.5 hover:shadow-sm' +
+              (isDashboard ? ' flex' : ' hidden md:flex')
+            }
+          >
+            <span className="grid size-11 place-items-center rounded-2xl bg-gradient-to-br from-primary to-chart-2 text-primary-foreground shadow">
+              <MessageCircle className="size-5" />
+            </span>
+            <span className="leading-tight hidden md:block">
+              <p className="text-sm font-semibold">زاربین</p>
+              <p className="text-[11px] text-muted-foreground">همراه هوش و انسان برای راهنمایی سریع</p>
+            </span>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2">

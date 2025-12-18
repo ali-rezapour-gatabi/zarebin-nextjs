@@ -100,6 +100,14 @@
   --chart-3: #e9c46a;
   --chart-4: #2a9d8f;
   --chart-5: #264653;
+  --sidebar: #fff6ef;
+  --sidebar-foreground: #3d2818;
+  --sidebar-primary: #e8704d;
+  --sidebar-primary-foreground: #fffaf5;
+  --sidebar-accent: #ffe2d4;
+  --sidebar-accent-foreground: #b8452e;
+  --sidebar-border: #e8dcc8;
+  --sidebar-ring: #e8704d;
 }
 
 .dark {
@@ -121,6 +129,14 @@
   --card-foreground: #f5e6d3;
   --popover: #211710;
   --popover-foreground: #f5e6d3;
+  --sidebar: #241812;
+  --sidebar-foreground: #f5e6d3;
+  --sidebar-primary: #f4a261;
+  --sidebar-primary-foreground: #1a1410;
+  --sidebar-accent: #3a261c;
+  --sidebar-accent-foreground: #f4a261;
+  --sidebar-border: #3d2818;
+  --sidebar-ring: #f4a261;
 }
 @layer base {
   * {
