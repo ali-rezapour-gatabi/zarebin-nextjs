@@ -1,36 +1,24 @@
 'use server';
-
 import { api } from '@/lib/baseUrl';
 import axios from 'axios';
 import { cookies } from 'next/headers';
 
-export default async function expertUserAction(formData: FormData) {
+export default async function getChatListAction() {
   const cookieStore = await cookies();
   const token = cookieStore.get('token');
 
   if (!token) {
-    return { success: false, message: 'برای تغییرات این بخش لازم است وارد شوید' };
+    return { success: false, message: 'برای دسترسی به این صفحه لازم است وارد شوید' };
   }
-
   try {
-    const response = await api.post('/identity/expert-user', formData, {
+    const response = await api.post('chat/get-chat-tabs', null, {
       headers: {
         Authorization: `Bearer ${token.value}`,
-        timeout: 30000,
       },
     });
-
-    if (response.data?.success === false) {
-      return {
-        success: false,
-        message: response.data?.message ?? 'خطایی در بروزرسانی حساب رخ داد',
-      };
-    }
-
     return {
-      success: true,
-      message: response.data?.message ?? 'اطلاعات با موفقیت ذخیره شد',
-      data: response.data?.result ?? response.data?.data,
+      success: response.data.success,
+      data: response.data.chat,
     };
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

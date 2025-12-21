@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useChatStore } from '@/store/chat';
 import { Send, StopCircle } from 'lucide-react';
+import sendMessageAction from '@/app/actions/send-message';
 
 type FormValues = { message: string };
-type ChatInputProps = { disabled?: boolean };
+type ChatInputProps = { disabled?: boolean; isMessage?: boolean };
 
-export function ChatInput({ disabled }: ChatInputProps) {
+export function ChatInput({ disabled, isMessage }: ChatInputProps) {
   const {
     handleSubmit,
     register,
@@ -22,7 +23,7 @@ export function ChatInput({ disabled }: ChatInputProps) {
   });
 
   const isLoading = useChatStore((state) => state.isLoading);
-  const sendMessage = useChatStore((state) => state.sendMessage);
+  const { currentConversation, setMessage, setExprtsList, setLoading, addMessage } = useChatStore();
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const messageValue = watch('message');
@@ -35,15 +36,48 @@ export function ChatInput({ disabled }: ChatInputProps) {
     textarea.style.height = textarea.scrollHeight + 'px';
   }, [messageValue]);
 
+  const createMessageId = () => {
+    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+      return crypto.randomUUID();
+    }
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  };
+
   const onSubmit = async (values: FormValues) => {
-    await sendMessage(values.message);
-    reset();
+    const trimmedMessage = values.message.trim();
+    if (!trimmedMessage) return;
+
+    addMessage({
+      id: createMessageId(),
+      message: trimmedMessage,
+      createdAt: new Date().toISOString(),
+    });
+
+    setLoading(true);
+    try {
+      const res = await sendMessageAction({ message: trimmedMessage, chatTabId: currentConversation });
+      if (res.success) {
+        const assistantContent = typeof res.chat === 'string' ? res.chat : String(res.chat ?? '');
+        if (assistantContent.trim().length > 0) {
+          addMessage({
+            id: createMessageId(),
+            analysis: assistantContent,
+            createdAt: new Date().toISOString(),
+          });
+        }
+        setMessage(typeof res.chat === 'string' ? res.chat : '');
+        setExprtsList(res.exprtsList);
+        reset();
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isDisabled = disabled || isLoading || isSubmitting;
 
   return (
-    <div className="z-10 backdrop-blur">
+    <div className={`z-10 backdrop-blur w-full sticky ${isMessage && 'bottom-0 flex flex-col items-center justify-center gap-3 p-4 text-center'}`}>
       <form dir="rtl" onSubmit={handleSubmit(onSubmit)} className="relative mx-auto mb-4 flex w-full max-w-3xl px-2 pt-3">
         <div className="relative flex w-full flex-col rounded-xl border border-muted-foreground/10 bg-muted/50 px-4 py-3 shadow-sm">
           <textarea

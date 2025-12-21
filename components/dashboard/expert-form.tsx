@@ -435,11 +435,11 @@ export const ExpertForm = () => {
       }
 
       toast.success('اطلاعات تخصصی ذخیره شد');
-      setLoading(false);
       window.location.reload();
     } catch {
-      setLoading(false);
       toast.error('ذخیره اطلاعات متخصص با خطا مواجه شد');
+    } finally {
+      setLoading(false);
     }
   };
 
