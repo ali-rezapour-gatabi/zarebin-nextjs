@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { updateUserAction } from '@/app/actions/update-user';
+import { updateUserAction } from '@/app/apis/actions/update-user';
 import { useUserStore } from '@/store/user';
 import { useShallow } from 'zustand/react/shallow';
 import type { ProfileData } from '@/store/user';
@@ -20,7 +20,6 @@ type ProfileFormValues = {
   phone: string;
   email: string;
   avatar?: FileList;
-  nationalId: string;
 };
 
 export function ProfileForm() {
@@ -45,8 +44,7 @@ export function ProfileForm() {
       firstName: profile?.firstName,
       lastName: profile?.lastName,
       phone: profile?.phoneNumber,
-      email: profile?.email,
-      nationalId: profile?.nationalId,
+      email: profile?.email ?? '',
     },
   });
 
@@ -55,8 +53,7 @@ export function ProfileForm() {
       firstName: profile?.firstName,
       lastName: profile?.lastName,
       phone: profile?.phoneNumber,
-      email: profile?.email,
-      nationalId: profile?.nationalId,
+      email: profile?.email ?? '',
     });
     setAvatarPreview(profile?.avatar ?? '');
   }, [profile, reset]);
@@ -91,7 +88,6 @@ export function ProfileForm() {
     formData.append('lastName', values.lastName);
     formData.append('phone', values.phone);
     formData.append('email', values.email);
-    formData.append('nationalId', values.nationalId);
     if (values.avatar?.[0]) {
       formData.append('avatar', values.avatar[0]);
     }
@@ -114,7 +110,6 @@ export function ProfileForm() {
                 phoneNumber: incomingProfile?.phoneNumber ?? profile?.phoneNumber ?? values.phone,
                 email: incomingProfile?.email ?? values.email ?? profile?.email ?? '',
                 avatar: incomingProfile?.avatar ?? profile?.avatar,
-                nationalId: incomingProfile?.nationalId ?? values.nationalId ?? profile?.nationalId ?? '',
               }
             : null;
 
@@ -125,8 +120,7 @@ export function ProfileForm() {
             firstName: nextProfile.firstName,
             lastName: nextProfile.lastName,
             phone: nextProfile.phoneNumber,
-            email: nextProfile.email,
-            nationalId: nextProfile.nationalId,
+            email: nextProfile.email ?? '',
             avatar: undefined,
           });
         } else {
@@ -209,35 +203,6 @@ export function ProfileForm() {
                 <div className="space-y-2">
                   <Label htmlFor="phone">شماره همراه</Label>
                   <Input id="phone" type="text" readOnly disabled className="cursor-not-allowed opacity-80 h-14" {...register('phone')} />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="nationalId">کد ملی</Label>
-                  <Input
-                    id="nationalId"
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="کد ملی خود را وارد کنید"
-                    className="h-14"
-                    disabled={isSaving}
-                    {...register('nationalId', {
-                      pattern: {
-                        value: /^[0-9]*$/,
-                        message: 'فقط عدد مجاز است',
-                      },
-                      maxLength: {
-                        value: 10,
-                        message: 'کد ملی باید ۱۰ رقم باشد',
-                      },
-                      minLength: {
-                        value: 10,
-                        message: 'کد ملی باید ۱۰ رقم باشد',
-                      },
-                      onChange: (e) => {
-                        e.target.value = e.target.value.replace(/\D/g, '');
-                      },
-                    })}
-                  />
                 </div>
               </div>
 

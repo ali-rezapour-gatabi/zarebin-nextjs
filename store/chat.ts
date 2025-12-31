@@ -24,8 +24,8 @@ type ChatState = {
   addMessage: (message: ChatMessage) => void;
   message: string;
   setMessage: (message: string) => void;
-  exprtsList: [];
-  setExprtsList: (exprtsList: []) => void;
+  expertsList: [];
+  setExpertsList: (expertsList: []) => void;
   isLoading: boolean;
   setLoading: (isLoading: boolean) => void;
 };
@@ -37,13 +37,13 @@ export const useChatStore = create<ChatStore>((set) => ({
   currentConversation: null,
   messages: [],
   message: '',
-  exprtsList: [],
+  expertsList: [],
   isLoading: false,
   setConversations: (conversations: Conversation[]) => set({ conversations }),
   setCurrentConversation: (id: string | null) => set({ currentConversation: id }),
   setMessages: (messages: ChatMessage[]) => set({ messages }),
   addMessage: (message: ChatMessage) => set((state) => ({ messages: [...state.messages, message] })),
-  setExprtsList: (exprtsList: []) => set({ exprtsList }),
+  setExpertsList: (expertsList: []) => set({ expertsList }),
   setMessage: (message: string) => set({ message }),
   setLoading: (isLoading: boolean) => set({ isLoading }),
 }));

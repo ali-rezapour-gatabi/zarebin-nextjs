@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useChatStore } from '@/store/chat';
 import { Send, StopCircle } from 'lucide-react';
-import sendMessageAction from '@/app/actions/send-message';
+import sendMessageAction from '@/app/apis/actions/send-message';
 
 type FormValues = { message: string };
 type ChatInputProps = { disabled?: boolean; isMessage?: boolean };
@@ -23,7 +23,7 @@ export function ChatInput({ disabled, isMessage }: ChatInputProps) {
   });
 
   const isLoading = useChatStore((state) => state.isLoading);
-  const { currentConversation, setMessage, setExprtsList, setLoading, addMessage } = useChatStore();
+  const { currentConversation, setMessage, setExpertsList, setLoading, addMessage } = useChatStore();
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const messageValue = watch('message');
@@ -66,7 +66,7 @@ export function ChatInput({ disabled, isMessage }: ChatInputProps) {
           });
         }
         setMessage(typeof res.chat === 'string' ? res.chat : '');
-        setExprtsList(res.exprtsList);
+        setExpertsList(res.expertsList);
         reset();
       }
     } finally {
@@ -79,7 +79,7 @@ export function ChatInput({ disabled, isMessage }: ChatInputProps) {
   return (
     <div className={`z-10 backdrop-blur w-full sticky ${isMessage && 'bottom-0 flex flex-col items-center justify-center gap-3 p-4 text-center'}`}>
       <form dir="rtl" onSubmit={handleSubmit(onSubmit)} className="relative mx-auto mb-4 flex w-full max-w-3xl px-2 pt-3">
-        <div className="relative flex w-full flex-col rounded-xl border border-muted-foreground/10 bg-muted/50 px-4 py-3 shadow-sm">
+        <div className="relative flex w-full flex-col rounded-xl border border-muted-foreground/20 bg-muted/50 px-4 py-3">
           <textarea
             {...register('message', {
               required: true,
@@ -92,7 +92,7 @@ export function ChatInput({ disabled, isMessage }: ChatInputProps) {
             placeholder="چیجوری میتونم کمکتون کنم؟؟"
             disabled={isDisabled}
             rows={1}
-            className="w-full resize-none bg-transparent outline-none max-h-40 overflow-y-auto pr-2 custom-scroll  text-white"
+            className="w-full resize-none bg-transparent outline-none max-h-40 overflow-y-auto pr-2 custom-scroll "
           />
 
           <div className="flex justify-end mt-3">

@@ -7,9 +7,8 @@ export type ProfileData = {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  email: string;
-  avatar?: string;
-  nationalId: string;
+  email: string | null;
+  avatar?: string | null;
 };
 
 export type ExperienceLevel = 'LESS_THAN_1_YEAR' | 'ONE_TO_THREE_YEARS' | 'THREE_TO_FIVE_YEARS' | 'FIVE_TO_TEN_YEARS' | 'MORE_THAN_TEN_YEARS';
@@ -45,8 +44,8 @@ type UserStore = {
 } & UIState & {
     setRole: (role: UserRole) => void;
     setActiveTab: (tab: UIState['activeTab']) => void;
-    setProfile: (profile: ProfileData) => void;
-    setExpert: (expert: ExpertData) => void;
+    setProfile: (profile: ProfileData | null) => void;
+    setExpert: (expert: ExpertData | null) => void;
   };
 
 export const useUserStore = create<UserStore>()(

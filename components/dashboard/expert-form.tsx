@@ -12,8 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { useShallow } from 'zustand/react/shallow';
-import expertUserAction from '@/app/actions/expert-user';
-import expertGetAction from '@/app/actions/expert-get';
+import expertUserAction from '@/app/apis/actions/expert-user';
+import expertGetAction from '@/app/apis/actions/expert-get';
 import {
   MAX_CONTACT_LINKS,
   MAX_CONTACT_NUMBERS,

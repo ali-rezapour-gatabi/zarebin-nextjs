@@ -24,7 +24,7 @@ export default async function sendMessageAction({ message, chatTabId }: { messag
     return {
       success: response.data.success,
       chat: response.data.analysis,
-      exprtsList: response.data.experts,
+      expertsList: response.data.experts,
     };
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

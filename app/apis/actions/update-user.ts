@@ -25,14 +25,12 @@ export async function updateUserAction(formData: FormData): Promise<UpdateUserRe
   const lastName = formData.get('lastName');
   const phone = formData.get('phone');
   const email = formData.get('email');
-  const nationalId = formData.get('nationalId');
   const avatar = formData.get('avatar');
 
   if (typeof firstName === 'string') forwardForm.append('firstName', firstName);
   if (typeof lastName === 'string') forwardForm.append('lastName', lastName);
   if (typeof phone === 'string') forwardForm.append('phone', phone);
   if (typeof email === 'string') forwardForm.append('email', email);
-  if (typeof nationalId === 'string') forwardForm.append('nationalId', nationalId);
   if (avatar instanceof File) {
     forwardForm.append('avatar', avatar);
   }

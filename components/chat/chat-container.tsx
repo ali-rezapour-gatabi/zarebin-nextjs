@@ -11,6 +11,7 @@ import { ChatMessage } from './chat-message';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
 import { Button } from '../ui/button';
 import { ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 function CollapsibleExpertList({ experts }: { experts: any[] }) {
   const [open, setOpen] = useState(false);
@@ -38,7 +39,7 @@ function CollapsibleExpertList({ experts }: { experts: any[] }) {
 }
 
 export function ChatContainer() {
-  const { isLoading, messages, exprtsList } = useChatStore();
+  const { isLoading, messages, expertsList } = useChatStore();
   const isEmpty = messages.length === 0;
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -50,12 +51,12 @@ export function ChatContainer() {
     <SidebarInset>
       <div className="relative flex h-full flex-col">
         <ScrollArea className="flex-1">
-          <div className="mx-auto flex max-w-3xl flex-col px-3 pb-32 pt-4 sm:px-4 mb-10">
+          <div className={cn('mx-auto max-w-3xl flex-col px-3 pb-32 pt-4 sm:px-4 mb-10', isEmpty ? 'hidden' : 'flex')}>
             <AnimatePresence initial={false}>
               {messages.map((item) => (
                 <div key={item.id} className="flex flex-col gap-4">
                   <ChatMessage message={item} />
-                  <div className="flex flex-col gap-2">{exprtsList && exprtsList.length > 0 && <CollapsibleExpertList experts={exprtsList || []} />}</div>
+                  <div className="flex flex-col gap-2">{expertsList && expertsList.length > 0 && <CollapsibleExpertList experts={expertsList || []} />}</div>
                 </div>
               ))}
             </AnimatePresence>
@@ -74,9 +75,9 @@ export function ChatContainer() {
         </ScrollArea>
 
         {isEmpty && (
-          <div className="flex h-full flex-col items-center justify-center gap-3 text-center w-full">
-            <h1 className="text-xl font-bold tracking-tight">شروع یک گفت‌وگوی جدید</h1>
-            <p className="text-sm text-muted-foreground">هر سؤالی دارید بپرسید؛ چت‌بات ما مشکل شما را تحلیل می‌کند و بهترین متخصص را برای حل آن پیدا می‌کند.</p>
+          <div className="flex flex-col items-center justify-center gap-3 text-center w-full">
+            <h1 className="text-xl font-bold tracking-tight">تخصص یاب</h1>
+            <span className="tracking-tight text-xs text-primary/60">با گفتن طرح , ایده , مشکلت یا .... میتونی متخصصشو پیدا کنی</span>
             <ChatInput isMessage={false} />
           </div>
         )}

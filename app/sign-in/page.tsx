@@ -10,8 +10,9 @@ import { MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAppStore } from '@/store/app';
-import axios from 'axios';
 import { useUserStore } from '@/store/user';
+import { SendOtp } from '../apis/actions/send-code';
+import { SignInWithOtp } from '../apis/actions/verify-code';
 
 type FormValues = {
   phone: string;
@@ -67,49 +68,61 @@ export default function SignInPage() {
     if (firstName.length === 0) return toast.error('لطفا نام را وارد کنید');
     if (lastName.length === 0) return toast.error('لطفا نام خانوادگی را وارد کنید');
 
-    setLoading(true);
-    const res = await axios.post('/apis/send-code', { phone });
-    setLoading(false);
-
-    if (!res.data.success) {
-      toast.error(res.data.message);
-      return;
+    try {
+      setLoading(true);
+      const res = await SendOtp(phone);
+      if (!res.success) {
+        toast.error(res.message);
+        return;
+      }
+      toast.success('کد تایید ارسال شد');
+      setOtpSent(true);
+    } catch (error) {
+      console.log(error);
+      toast.success('خطا در ارسال کد لطفا مجدد تلاش کنید');
+    } finally {
+      setLoading(false);
     }
-
-    toast.success('کد تایید ارسال شد');
-    setOtpSent(true);
   };
 
   const onSubmit = async (values: FormValues) => {
     if (!otpSent) return;
 
-    const res = await axios.post('/apis/sign-in', { phoneNumber: values.phone, code: values.code, firstName: values.firstName, lastName: values.lastName });
-    if (!res.data.success) return toast.error(res.data.message);
-    setProfile(res.data.data);
+    const res = await SignInWithOtp({ phoneNumber: values.phone, code: values.code, firstName: values.firstName, lastName: values.lastName });
+    if (!res.success) return toast.error(res.message);
+    setProfile({
+      email: res.data.email,
+      firstName: res.data.first_name,
+      lastName: res.data.last_name,
+      phoneNumber: res.data.phone_number,
+      avatar: res.data.avatar,
+    });
     setHasAuth(true);
 
-    router.push('/');
+    // router.push('/');
   };
 
   if (hasAuth) {
-    router.push('/');
+    // router.push('/');
     return null;
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-4 mx-auto w-full">
+    <main className="flex flex-col items-center px-4 mx-auto w-full mt-20">
       <div className="w-full max-w-[400px] items-center flex flex-col gap-3 text-center mb-4">
-        <Button className="w-20 h-20 mx-auto rounded-xl bg-gradient-to-br from-primary to-chart-2" onClick={() => router.push('/')}>
-          <MessageCircle className="size-12 text-white" />
-        </Button>
+        <div className="flex gap-3 items-center">
+          <h1 className="text-2xl font-bold">ادامه مسیر ذره بین</h1>
+          <span className="grid size-10 place-items-center rounded-2xl bg-gradient-to-br from-primary to-accent-foreground text-primary-foreground">
+            <MessageCircle className="size-5" />
+          </span>
+        </div>
 
-        <h1 className="text-2xl font-bold">ورود به حساب کاربری</h1>
-        <p className="text-sm text-muted-foreground">ورود شما به منزله تایید قوانین و مقررات می‌باشد</p>
+        <span className="text-sm text-primary/80">حفظ اطلاعات و حریم خصوصی شما اولیت ماست</span>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
-          <Input {...register('phone')} placeholder="شماره تلفن" className="h-13 text-center" disabled={otpSent} />
-          <Input {...register('firstName')} placeholder="نام خود را وارد کنید" className="h-13 text-center" disabled={otpSent} />
-          <Input {...register('lastName')} placeholder="نام خانوادگی خود را وارد کنید" className="h-13 text-center" disabled={otpSent} />
+          <Input {...register('phone')} placeholder="شماره تلفن" className="h-14 text-[14px] text-center" disabled={otpSent} />
+          <Input {...register('firstName')} placeholder="نام خود را وارد کنید" className="h-14 text-[14px] text-center" disabled={otpSent} />
+          <Input {...register('lastName')} placeholder="نام خانوادگی خود را وارد کنید" className="h-14 text-[14px] text-center" disabled={otpSent} />
 
           <AnimatePresence>
             {otpSent && (
@@ -145,6 +158,7 @@ export default function SignInPage() {
             </>
           )}
         </form>
+        <p className="text-xs text-muted-foreground mb-5">ورود شما به منزله تایید قوانین و مقررات می‌باشد</p>
       </div>
     </main>
   );
