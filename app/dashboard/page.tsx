@@ -8,28 +8,19 @@ import { useUserStore } from '@/store/user';
 import { useEffect } from 'react';
 
 export default function DashboardPage() {
-  const { role, activeTab, setActiveTab } = useUserStore();
-  const isExpert = role === 'expert';
-
-  useEffect(() => {
-    if (!isExpert && activeTab === 'expert') {
-      setActiveTab('general');
-    }
-  }, [activeTab, isExpert, setActiveTab]);
+  const { activeTab, setActiveTab } = useUserStore();
 
   return (
     <DashboardLayout>
-      <Tabs value={isExpert ? activeTab : 'general'} onValueChange={(value) => setActiveTab(value as 'general' | 'expert')} className="space-y-6" dir="rtl">
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'general' | 'expert')} className="space-y-6" dir="rtl">
         <div className="w-full overflow-x-auto">
           <TabsList className="md:w-fit">
             <TabsTrigger value="general" className="min-w-32 w-1/2">
               اطلاعات عمومی
             </TabsTrigger>
-            {isExpert && (
-              <TabsTrigger value="expert" className="min-w-32 w-1/2">
-                اطلاعات متخصص
-              </TabsTrigger>
-            )}
+            <TabsTrigger value="expert" className="min-w-32 w-1/2">
+              اطلاعات متخصص
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -37,11 +28,9 @@ export default function DashboardPage() {
           <ProfileForm />
         </TabsContent>
 
-        {isExpert && (
-          <TabsContent value="expert" className="space-y-4">
-            <ExpertForm />
-          </TabsContent>
-        )}
+        <TabsContent value="expert" className="space-y-4">
+          <ExpertForm />
+        </TabsContent>
       </Tabs>
     </DashboardLayout>
   );

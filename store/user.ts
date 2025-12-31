@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type UserRole = 'user' | 'expert';
-
 export type ProfileData = {
   firstName: string;
   lastName: string;
@@ -38,11 +36,9 @@ type UIState = {
 };
 
 type UserStore = {
-  role: UserRole;
   profile: ProfileData | null;
   expert: ExpertData | null;
 } & UIState & {
-    setRole: (role: UserRole) => void;
     setActiveTab: (tab: UIState['activeTab']) => void;
     setProfile: (profile: ProfileData | null) => void;
     setExpert: (expert: ExpertData | null) => void;
@@ -51,13 +47,11 @@ type UserStore = {
 export const useUserStore = create<UserStore>()(
   persist(
     (set) => ({
-      role: 'expert',
       activeTab: 'general',
       isProfileSaving: false,
       isExpertSaving: false,
       profile: null,
       expert: null,
-      setRole: (role) => set({ role }),
       setActiveTab: (tab) => set({ activeTab: tab }),
       setProfile: (profile) => set({ profile }),
       setExpert: (expert) => set({ expert }),
@@ -65,7 +59,6 @@ export const useUserStore = create<UserStore>()(
     {
       name: 'user-profile-store',
       partialize: (state) => ({
-        role: state.role,
         profile: state.profile,
         expert: state.expert,
         activeTab: state.activeTab,

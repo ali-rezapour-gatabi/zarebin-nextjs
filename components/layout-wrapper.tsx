@@ -19,10 +19,10 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   }, [setHasAuth]);
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <main className="flex min-h-screen w-full flex-col">
       <SiteHeader />
       <Toaster />
       <div className="flex w-full flex-1 flex-col md:flex-row">{children}</div>
-    </div>
+    </main>
   );
 }

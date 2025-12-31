@@ -91,8 +91,7 @@ export function ChatInput({ disabled, isMessage }: ChatInputProps) {
             }}
             placeholder="چیجوری میتونم کمکتون کنم؟؟"
             disabled={isDisabled}
-            rows={1}
-            className="w-full resize-none bg-transparent outline-none max-h-40 overflow-y-auto pr-2 custom-scroll "
+            className="w-full resize-none bg-transparent outline-none max-h-52 min-h-20 overflow-y-auto pr-2 custom-scroll p-2"
           />
 
           <div className="flex justify-end mt-3">
@@ -100,9 +99,9 @@ export function ChatInput({ disabled, isMessage }: ChatInputProps) {
               type="submit"
               size="icon"
               disabled={isDisabled || !messageValue?.trim()}
-              className={cn('rounded-xl h-10 w-10 flex items-center justify-center transition-all', !messageValue?.trim() ? 'opacity-50 cursor-not-allowed' : '')}
+              className={cn('rounded-xl h-12 w-12 flex items-center justify-center transition-all', !messageValue?.trim() ? 'opacity-50 cursor-not-allowed' : '')}
             >
-              {isLoading ? <StopCircle className="size-5" rotate={45} /> : <Send className="size-5" rotate={90} />}
+              {isLoading ? <StopCircle className="size-6" rotate={45} /> : <Send className="size-6" rotate={90} />}
             </Button>
           </div>
         </div>
