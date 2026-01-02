@@ -5,7 +5,7 @@ import { useEffect, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, LogIn, LogOut, MessageCircle } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { useAppStore } from '@/store/app';
@@ -13,6 +13,7 @@ import { useUserStore } from '@/store/user';
 import { logoutAction } from '@/app/apis/actions/logout';
 import { toast } from 'sonner';
 import { getUserAction } from '@/app/apis/actions/get-user';
+import { User2 } from 'lucide-react';
 
 export function SiteHeader() {
   const router = useRouter();
@@ -68,18 +69,24 @@ export function SiteHeader() {
               <DropdownMenu dir="rtl">
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="rounded-full bg-card/70 px-0 pl-3">
-                    <Avatar className="size-8 rounded-full">
-                      <AvatarImage src={'/api/' + profile?.avatar || '/avatar.png'} alt={userInitials} className="object-cover" />
-                      <AvatarFallback className="rounded-full bg-accent object-contain text-accent-foreground text-sm font-semibold">{userInitials}</AvatarFallback>
+                    <Avatar className="size-8 rounded-full items-center justify-center">
+                      {profile?.avatar ? (
+                        <AvatarImage src={'/api/' + profile?.avatar} alt={userInitials} className="object-cover" />
+                      ) : (
+                        <User2 className="size-8 bg-primary/10 rounded-full p-1" />
+                      )}
                     </Avatar>
                     <span className="hidden text-sm font-semibold sm:inline">{userInitials || 'کاربر'}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-64">
                   <DropdownMenuLabel className="flex items-center gap-3">
-                    <Avatar className="size-9 rounded-xl border border-border/70">
-                      <AvatarImage src={'/api/' + profile?.avatar} alt={userInitials} className="object-cover" />
-                      <AvatarFallback className="rounded-xl bg-accent text-accent-foreground text-sm font-semibold">{userInitials}</AvatarFallback>
+                    <Avatar className="size-9 rounded-xl border border-border/70 items-center justify-center">
+                      {profile?.avatar ? (
+                        <AvatarImage src={'/api/' + profile?.avatar} alt={userInitials} className="object-cover" />
+                      ) : (
+                        <User2 className="size-8 rounded-full p-1" />
+                      )}
                     </Avatar>
                     <div className="space-y-0.5">
                       <p className="text-sm font-semibold">{userInitials || 'کاربر ذره بین'}</p>

@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 export default function HomePage() {
   const { setCurrentConversation, setExpertsList, setMessage, setMessages } = useChatStore();
-  const [activeTab, setActiveTab] = useState('chat');
+  const [activeTab, setActiveTab] = useState('idea');
   useEffect(() => {
     setMessage('');
     setExpertsList([]);
@@ -22,11 +22,11 @@ export default function HomePage() {
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="space-y-6 w-full h-full mt-20 min-w-[300px] md:min-w-[600px] lg:min-w-[800px]" dir="rtl">
         <div className="w-full overflow-x-auto">
           <TabsList className="w-full rounded-md flex justify-center mx-auto">
-            <TabsTrigger value="chat" className="min-w-32 w-1/2">
-              پیدا کردن متخصص
-            </TabsTrigger>
             <TabsTrigger value="idea" className="min-w-32 w-1/2">
               مطرح کردن ایده
+            </TabsTrigger>
+            <TabsTrigger value="chat" className="min-w-32 w-1/2">
+              پیدا کردن متخصص
             </TabsTrigger>
           </TabsList>
         </div>

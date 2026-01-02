@@ -5,7 +5,6 @@ import { ExpertForm } from '@/components/dashboard/expert-form';
 import { ProfileForm } from '@/components/dashboard/profile-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserStore } from '@/store/user';
-import { useEffect } from 'react';
 
 export default function DashboardPage() {
   const { activeTab, setActiveTab } = useUserStore();
