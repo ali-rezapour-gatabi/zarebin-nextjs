@@ -5,6 +5,7 @@ import { useState } from 'react';
 import TiptapEditor from '@/components/idea/tiptap-editor';
 import IdeaForm from '@/components/idea/idea-form';
 import { Button } from '@/components/ui/button';
+import FileImportToEditor from '@/components/idea/file-import-to-editor';
 
 type IdeaCreateFormValues = {
   title: string;
@@ -18,10 +19,19 @@ export default function CreateIdea() {
   const [activeTab, setActiveTab] = useState('general');
   const {
     control,
+    setValue,
     watch,
-    formState: { isDirty, isLoading },
-  } = useForm<IdeaCreateFormValues>();
-  const hasBlank = watch('title')?.trim().length === 0 || watch('description')?.trim().length === 0 || watch('skill')?.trim().length === 0 || watch('domain')?.trim().length === 0;
+    formState: { isLoading },
+  } = useForm<IdeaCreateFormValues>({
+    defaultValues: {
+      title: '',
+      description: '',
+      domain: '',
+      skill: '',
+      seeComments: false,
+    },
+  });
+  const descriptionValue = watch('description') ?? '';
 
   return (
     <form className="mt-6 w-full space-y-10 px-5">
@@ -42,6 +52,12 @@ export default function CreateIdea() {
         </TabsContent>
 
         <TabsContent value="description" className="space-y-4">
+          <FileImportToEditor
+            currentText={descriptionValue}
+            onImport={(html) => setValue('description', html, { shouldDirty: true, shouldValidate: true })}
+            disabled={isLoading}
+            preserveMultipleSpaces
+          />
           <Controller
             name="description"
             control={control}
@@ -59,7 +75,9 @@ export default function CreateIdea() {
               </div>
             )}
           />{' '}
-          <Button className="">انتشار</Button>
+          <div className="flex flex-col md:flex-row justify-between mb-10">
+            <Button className="px-10 text-foreground h-12">انتشار</Button>
+          </div>
         </TabsContent>
       </Tabs>
     </form>
