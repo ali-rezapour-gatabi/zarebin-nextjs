@@ -16,8 +16,7 @@ type IdeaCreateFormValues = {
   title: string;
   description: string;
   domain: string;
-  skill: string;
-  seeComments: boolean;
+  commentsVisibility: boolean;
 };
 
 export default function IdeaForm({
@@ -29,7 +28,7 @@ export default function IdeaForm({
 }) {
   const [open, setOpen] = useState(false);
   return (
-    <section className="px-8 lg:p-0">
+    <section className="px-3 lg:p-0">
       <h1 className="text-2xl font-bold mt-3 md:mt-10">ایده یا پیشنهادت رو با بقیه به اشتراک بذار</h1>
       <p className="text-sm text-primary/70 mt-3 tracking-normal font-bold leading-6">
         اگه یه ایده توی ذهنت داری یا راه‌ حلی برای یه مشکل پیدا کردی، اینجا می‌تونی مطرحش کنی و از بازخورد بقیه استفاده کنی.
@@ -49,7 +48,9 @@ export default function IdeaForm({
           }}
           render={({ field, fieldState }) => (
             <div className="space-y-2">
-              <Label htmlFor="title">عنوان ایده</Label>
+              <Label className="text-xs" htmlFor="title">
+                عنوان ایده
+              </Label>
               <Input {...field} id="title" type="text" placeholder="عنوان ایدتو به صورت خلاصه بنویس" className="h-12 mt-2" />
               {fieldState.error && <p className="text-xs text-red-500">{fieldState.error.message}</p>}
             </div>
@@ -62,7 +63,7 @@ export default function IdeaForm({
             rules={{ required: 'حوزه اصلی الزامی است' }}
             render={({ field, fieldState }) => (
               <div className="w-full flex flex-col gap-1">
-                <Label className="mb-2">حوزه‌های ایدت میتونه تو مطرح کردنش بهتر کمکت کنه</Label>
+                <Label className="mb-2 text-xs">حوزه‌های ایدت میتونه تو مطرح کردنش بهتر کمکت کنه</Label>
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <Button type="button" variant="outline" role="combobox" aria-expanded={open} className="w-full h-12 justify-between">
@@ -103,20 +104,20 @@ export default function IdeaForm({
             )}
           />
           <Controller
-            name="domain"
+            name="commentsVisibility"
             control={control}
             rules={{ required: 'حوزه اصلی الزامی است' }}
             render={({ field, fieldState }) => (
               <div className="w-full flex flex-col gap-3 ">
-                <Label>نمایش نظرات</Label>
-                <Select dir="rtl">
+                <Label className="text-xs">نمایش نظرات</Label>
+                <Select dir="rtl" value={field.value === true ? 'PUBLIC' : 'PRIVATE'} onValueChange={(value) => field.onChange(value === 'PUBLIC' ? true : false)}>
                   <SelectTrigger className="w-full h-12">
                     <SelectValue placeholder="انتخاب نوع نمایش نظرات کاربران" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="public">نمایش نظرات به صورت عمومی</SelectItem>
-                      <SelectItem value="private">نمایش نظرات به صورت خصوصی</SelectItem>
+                      <SelectItem value="POBLIC">نمایش نظرات به صورت عمومی</SelectItem>
+                      <SelectItem value="PRIVATE">نمایش نظرات به صورت خصوصی</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

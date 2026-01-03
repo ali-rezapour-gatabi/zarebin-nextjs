@@ -13,7 +13,7 @@ type UpdateUserResult = {
 
 export async function updateUserAction(formData: FormData): Promise<UpdateUserResult> {
   const cookieStore = await cookies();
-  const token = cookieStore.get('token');
+  const token = cookieStore.get('access');
 
   if (!token) {
     return { success: false, message: 'برای تغییرات این بخش لازم است وارد شوید' };
@@ -36,7 +36,7 @@ export async function updateUserAction(formData: FormData): Promise<UpdateUserRe
   }
 
   try {
-    const response = await api.patch('/identity/update-user', forwardForm, {
+    const response = await api.patch('/users/identity/update-user', forwardForm, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },

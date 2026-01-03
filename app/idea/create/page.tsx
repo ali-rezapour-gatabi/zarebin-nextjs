@@ -6,17 +6,20 @@ import TiptapEditor from '@/components/idea/tiptap-editor';
 import IdeaForm from '@/components/idea/idea-form';
 import { Button } from '@/components/ui/button';
 import FileImportToEditor from '@/components/idea/file-import-to-editor';
+import { CreateIdeaAction } from '@/app/apis/actions/create-idea';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
-type IdeaCreateFormValues = {
+export type IdeaCreateFormValues = {
   title: string;
   description: string;
   domain: string;
-  skill: string;
-  seeComments: boolean;
+  commentsVisibility: boolean;
 };
 
 export default function CreateIdea() {
   const [activeTab, setActiveTab] = useState('general');
+  const router = useRouter();
   const {
     control,
     setValue,
@@ -27,14 +30,20 @@ export default function CreateIdea() {
       title: '',
       description: '',
       domain: '',
-      skill: '',
-      seeComments: false,
+      commentsVisibility: true,
     },
   });
   const descriptionValue = watch('description') ?? '';
 
+  const onSubmit = async (data: IdeaCreateFormValues) => {
+    const res = await CreateIdeaAction(data);
+    if (!res.success) return toast.error(res.message);
+    toast.success(res.message);
+    router.push('/dashboard/contents');
+  };
+
   return (
-    <form className="mt-6 w-full space-y-10 px-5">
+    <form className="mt-6 w-full space-y-10 px-5" onSubmit={control.handleSubmit(onSubmit)}>
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'general' | 'description')} className="w-full space-y-6" dir="rtl">
         <div className="w-full overflow-x-auto">
           <TabsList className="md:w-fit">
@@ -76,7 +85,9 @@ export default function CreateIdea() {
             )}
           />{' '}
           <div className="flex flex-col md:flex-row justify-between mb-10">
-            <Button className="px-10 text-foreground h-12">انتشار</Button>
+            <Button type="submit" className="px-10 text-foreground h-12">
+              انتشار
+            </Button>
           </div>
         </TabsContent>
       </Tabs>

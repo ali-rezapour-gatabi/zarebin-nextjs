@@ -14,11 +14,13 @@ import { logoutAction } from '@/app/apis/actions/logout';
 import { toast } from 'sonner';
 import { getUserAction } from '@/app/apis/actions/get-user';
 import { User2 } from 'lucide-react';
+import { clearAccessToken } from '@/lib/auth-token';
 
 export function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
   const hasAuth = useAppStore((state) => state.hasAuth);
+  const setSignInDrawerOpen = useAppStore((state) => state.setSignInDrawerOpen);
   const setHasAuth = useAppStore((state) => state.setHasAuth);
   const { profile, setExpert, setProfile } = useUserStore();
 
@@ -43,6 +45,7 @@ export function SiteHeader() {
     setProfile(null);
     setExpert(null);
     setHasAuth(false);
+    clearAccessToken();
     router.push('/');
   };
 
@@ -107,7 +110,7 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Button variant="ghost" size="sm" className="rounded-full" onClick={() => router.push('/sign-in')}>
+              <Button variant="ghost" size="sm" className="rounded-full" onClick={() => setSignInDrawerOpen(true)}>
                 <LogIn className="size-4" />
                 <span className="mr-1">ورود</span>
               </Button>

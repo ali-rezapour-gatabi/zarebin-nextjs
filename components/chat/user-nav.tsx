@@ -25,6 +25,7 @@ export function NavUser({
   const router = useRouter();
   const theme = useAppStore((state) => state.theme);
   const themeToggle = useAppStore((state) => state.toggleTheme);
+  const setSignInDrawerOpen = useAppStore((state) => state.setSignInDrawerOpen);
   const { hasAuth } = useAppStore();
   const { isMobile, open } = useSidebar();
   const isCollapsed = !open && !isMobile;
@@ -72,7 +73,15 @@ export function NavUser({
               </DropdownMenuLabel>
             )}
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => router.push(hasAuth ? '/dashboard' : '/sign-in')}>
+              <DropdownMenuItem
+                onClick={() => {
+                  if (hasAuth) {
+                    router.push('/dashboard');
+                  } else {
+                    setSignInDrawerOpen(true);
+                  }
+                }}
+              >
                 <User2 />
                 {hasAuth ? 'ورود به پنل کاربری' : 'ورود به حساب کاربری'}
               </DropdownMenuItem>

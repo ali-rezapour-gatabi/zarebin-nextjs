@@ -18,11 +18,11 @@ type SignDataResult = {
   avatar: string | null;
 };
 
-type ActionResult = { success: true; message: string; data: SignDataResult } | { success: false; message: string };
+type ActionResult = { success: true; message: string; data: SignDataResult; access: string } | { success: false; message: string };
 
 export async function SignInWithOtp(input: SignInInput): Promise<ActionResult> {
   try {
-    const response = await api.post('/identity/verify-otp/', {
+    const response = await api.post('/users/identity/verify-otp/', {
       phone_number: input.phoneNumber,
       first_name: input.firstName,
       last_name: input.lastName,
@@ -33,24 +33,24 @@ export async function SignInWithOtp(input: SignInInput): Promise<ActionResult> {
       return { success: false, message: response.data?.message ?? 'خطا در ارتباط با سرور' };
     }
 
-    const token = response.data?.token;
+    const access = response.data?.access;
     const refreshToken = response.data?.refresh;
-    if (!token || !refreshToken) {
+    if (!access || !refreshToken) {
       return { success: false, message: 'احراض هویت ناموفق بود' };
     }
 
     const cookieStore = await cookies();
-    cookieStore.set('token', token, {
+    cookieStore.set('access', access, {
       httpOnly: true,
       path: '/',
-      maxAge: 60 * 60 * 24 * 30,
+      maxAge: 60 * 60 * 24 * 1,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     });
-    cookieStore.set('refreshToken', refreshToken, {
+    cookieStore.set('refresh', refreshToken, {
       httpOnly: true,
       path: '/',
-      maxAge: 60 * 60 * 24 * 30,
+      maxAge: 60 * 60 * 24 * 7,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     });
@@ -59,6 +59,7 @@ export async function SignInWithOtp(input: SignInInput): Promise<ActionResult> {
       success: true,
       message: response.data?.message ?? 'ورود موفق',
       data: response.data?.data ?? null,
+      access,
     };
   } catch (error: any) {
     return { success: false, message: error.message ?? 'خطا در ارتباط با سرور' };

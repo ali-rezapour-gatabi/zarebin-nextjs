@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 
 export default async function expertUserAction(formData: FormData) {
   const cookieStore = await cookies();
-  const token = cookieStore.get('token');
+  const token = cookieStore.get('access');
 
   if (!token) {
     return { success: false, message: 'برای تغییرات این بخش لازم است وارد شوید' };

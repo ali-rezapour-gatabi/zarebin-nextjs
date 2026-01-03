@@ -5,16 +5,15 @@ import { cookies } from 'next/headers';
 
 export async function logoutAction() {
   const cookieStore = await cookies();
-  if (!cookieStore.get('refreshToken')) {
+  if (!cookieStore.get('refresh')) {
     return {
       success: false,
       message: 'برای خروج از سیستم لازم است اول ورود کنید',
     };
   }
 
-  console.log(cookieStore.get('refreshToken'));
   try {
-    const response = await api.post('/identity/logout/', { token: cookieStore.get('refreshToken')?.value });
+    const response = await api.post('/users/identity/logout/', { token: cookieStore.get('refresh')?.value });
 
     if (response.data?.success === false) {
       return {
@@ -23,13 +22,13 @@ export async function logoutAction() {
       };
     }
 
-    cookieStore.delete('token');
+    cookieStore.delete('refresh');
+    cookieStore.delete('access');
     return {
       success: true,
       message: response.data?.message ?? 'خروج از سیستم موفق',
     };
-  } catch (error: any) {
-    console.log(error);
+  } catch {
     return {
       success: false,
       message: 'خطای غیرمنتظره‌ای رخ داد',

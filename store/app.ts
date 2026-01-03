@@ -6,6 +6,7 @@ export type ThemeMode = 'light' | 'dark';
 type AppState = {
   isLoading: boolean;
   theme: ThemeMode;
+  isSignInDrawerOpen: boolean;
 };
 
 type AppActions = {
@@ -13,6 +14,7 @@ type AppActions = {
   toggleTheme: () => void;
   hasAuth: boolean;
   setHasAuth: (value: boolean) => void;
+  setSignInDrawerOpen: (value: boolean) => void;
 };
 
 export type ChatStore = AppState & AppActions;
@@ -24,7 +26,9 @@ export const useAppStore = create<ChatStore>()(
       isSidebarOpen: false,
       theme: 'light',
       hasAuth: false,
+      isSignInDrawerOpen: false,
       setHasAuth: (value) => set({ hasAuth: value }),
+      setSignInDrawerOpen: (value) => set({ isSignInDrawerOpen: value }),
 
       setTheme: (mode) => {
         set({ theme: mode });

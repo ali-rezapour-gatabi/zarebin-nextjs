@@ -5,7 +5,7 @@ import { api } from '@/lib/baseUrl';
 
 export async function SendOtp(phone: string): Promise<{ success: boolean; message: string }> {
   try {
-    const response = await api.post('/identity/send-otp/', {
+    const response = await api.post('/users/identity/send-otp/', {
       phone_number: phone,
     });
 

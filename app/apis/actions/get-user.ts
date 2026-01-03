@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 
 export async function getUserAction(): Promise<{ success: boolean; message: string; data?: unknown }> {
   const cookieStore = await cookies();
-  const token = cookieStore.get('token');
+  const token = cookieStore.get('access');
 
   if (!token) {
     return {
@@ -15,7 +15,7 @@ export async function getUserAction(): Promise<{ success: boolean; message: stri
   }
 
   try {
-    const response = await api.post('/identity/get/', null, {
+    const response = await api.post('/users/identity/get/', null, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
