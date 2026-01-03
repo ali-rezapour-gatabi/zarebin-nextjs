@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useChatStore } from '@/store/chat';
 import { Send, StopCircle } from 'lucide-react';
-import sendMessageAction from '@/app/apis/actions/send-message';
+import sendMessageAction from '@/app/apis/actions/chat/send-message';
 
 type FormValues = { message: string };
 type ChatInputProps = { disabled?: boolean; isMessage?: boolean };

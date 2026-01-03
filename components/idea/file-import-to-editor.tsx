@@ -6,7 +6,7 @@ import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerFooter, DrawerHeader } from '@/components/ui/drawer';
 
 const ACCEPTED_EXTENSIONS = ['pdf', 'md', 'mdx', 'txt'];
 
@@ -34,7 +34,7 @@ export default function FileImportToEditor({ onImport, currentText, disabled, ma
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('file');
   const [formatMode, setFormatMode] = useState<FormatMode>('markdown');
-  const [insertMode, setInsertMode] = useState<InsertMode>(mode);
+  const insertMode = mode;
 
   const handlePickFile = () => {
     if (!disabled && !isLoading) {
@@ -141,7 +141,7 @@ export default function FileImportToEditor({ onImport, currentText, disabled, ma
         setViewMode('file');
         setIsDrawerOpen(true);
       }
-    } catch (err) {
+    } catch {
       setError('خواندن فایل با خطا مواجه شد.');
     } finally {
       setIsLoading(false);

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { DashboardLayout } from '@/components/dashboard/dashboard-layout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import IdeaContents from '@/components/dashboard/contents/idea';
 
 export default function ContentsPage() {
   const [activeTab, setActiveTab] = useState<'idea' | 'comment'>('idea');
@@ -19,9 +20,10 @@ export default function ContentsPage() {
           </TabsList>
         </div>
 
-        <TabsContent value="idea" className="space-y-4"></TabsContent>
+        <TabsContent value="idea" className="space-y-4">
+          <IdeaContents />
+        </TabsContent>
         <TabsContent value="comment" className="space-y-4"></TabsContent>
-        
       </Tabs>
     </DashboardLayout>
   );

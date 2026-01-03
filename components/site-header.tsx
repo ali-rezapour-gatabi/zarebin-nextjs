@@ -10,9 +10,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Button } from '@/components/ui/button';
 import { useAppStore } from '@/store/app';
 import { useUserStore } from '@/store/user';
-import { logoutAction } from '@/app/apis/actions/logout';
+import { logoutAction } from '@/app/apis/actions/authentication/logout';
 import { toast } from 'sonner';
-import { getUserAction } from '@/app/apis/actions/get-user';
+import { getUserAction } from '@/app/apis/actions/dashboard/get-user';
 import { User2 } from 'lucide-react';
 import { clearAccessToken } from '@/lib/auth-token';
 

@@ -1,8 +1,8 @@
 'use server';
 
-import { api } from '@/lib/baseUrl';
 import axios from 'axios';
 import { cookies } from 'next/headers';
+import { serverRequest } from '@/lib/api.server';
 
 export default async function expertUserAction(formData: FormData) {
   const cookieStore = await cookies();
@@ -13,11 +13,11 @@ export default async function expertUserAction(formData: FormData) {
   }
 
   try {
-    const response = await api.post('/identity/expert-user', formData, {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-        timeout: 30000,
-      },
+    const response = await serverRequest<{ success?: boolean; message?: string; result?: unknown; data?: unknown }>({
+      method: 'POST',
+      url: '/identity/expert-user',
+      data: formData,
+      timeout: 30_000,
     });
 
     if (response.data?.success === false) {

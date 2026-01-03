@@ -4,8 +4,8 @@ import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useShallow } from 'zustand/react/shallow';
-import expertUserAction from '@/app/apis/actions/expert-user';
-import expertGetAction from '@/app/apis/actions/expert-get';
+import expertUserAction from '@/app/apis/actions/dashboard/expert-user';
+import expertGetAction from '@/app/apis/actions/dashboard/expert-get';
 import {
   MAX_CONTACT_LINKS,
   MAX_CONTACT_NUMBERS,

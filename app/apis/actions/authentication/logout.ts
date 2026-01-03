@@ -1,7 +1,7 @@
 'use server';
 
-import { api } from '@/lib/baseUrl';
 import { cookies } from 'next/headers';
+import { serverRequest } from '@/lib/api.server';
 
 export async function logoutAction() {
   const cookieStore = await cookies();
@@ -13,7 +13,12 @@ export async function logoutAction() {
   }
 
   try {
-    const response = await api.post('/users/identity/logout/', { token: cookieStore.get('refresh')?.value });
+    const response = await serverRequest<{ success?: boolean; message?: string }>({
+      method: 'POST',
+      url: '/users/identity/logout/',
+      data: { token: cookieStore.get('refresh')?.value },
+      skipRefresh: true,
+    });
 
     if (response.data?.success === false) {
       return {

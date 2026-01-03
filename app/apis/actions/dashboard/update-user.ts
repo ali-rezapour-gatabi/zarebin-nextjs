@@ -2,8 +2,7 @@
 
 import { cookies } from 'next/headers';
 import axios from 'axios';
-
-import { api } from '@/lib/baseUrl';
+import { serverRequest } from '@/lib/api.server';
 
 type UpdateUserResult = {
   success: boolean;
@@ -36,10 +35,10 @@ export async function updateUserAction(formData: FormData): Promise<UpdateUserRe
   }
 
   try {
-    const response = await api.patch('/users/identity/update-user', forwardForm, {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
+    const response = await serverRequest<{ success?: boolean; message?: string; result?: unknown; data?: unknown }>({
+      method: 'PATCH',
+      url: '/users/identity/update-user',
+      data: forwardForm,
     });
 
     if (response.data?.success === false) {

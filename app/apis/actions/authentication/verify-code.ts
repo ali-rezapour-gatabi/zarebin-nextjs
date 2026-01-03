@@ -1,7 +1,8 @@
 'use server';
 
+import axios from 'axios';
 import { cookies } from 'next/headers';
-import { api } from '@/lib/baseUrl';
+import { serverRequest } from '@/lib/api.server';
 
 type SignInInput = {
   phoneNumber: string;
@@ -18,15 +19,21 @@ type SignDataResult = {
   avatar: string | null;
 };
 
-type ActionResult = { success: true; message: string; data: SignDataResult; access: string } | { success: false; message: string };
+type ActionResult = { success: true; message: string; data: SignDataResult | null; access: string } | { success: false; message: string };
 
 export async function SignInWithOtp(input: SignInInput): Promise<ActionResult> {
   try {
-    const response = await api.post('/users/identity/verify-otp/', {
-      phone_number: input.phoneNumber,
-      first_name: input.firstName,
-      last_name: input.lastName,
-      code: input.code,
+    const response = await serverRequest<{ access?: string; refresh?: string; data?: SignDataResult; message?: string; success?: boolean }>({
+      method: 'POST',
+      url: '/users/identity/verify-otp/',
+      data: {
+        phone_number: input.phoneNumber,
+        first_name: input.firstName,
+        last_name: input.lastName,
+        code: input.code,
+      },
+      skipAuth: true,
+      skipRefresh: true,
     });
 
     if (response.data?.success === false) {
@@ -61,7 +68,10 @@ export async function SignInWithOtp(input: SignInInput): Promise<ActionResult> {
       data: response.data?.data ?? null,
       access,
     };
-  } catch (error: any) {
-    return { success: false, message: error.message ?? 'خطا در ارتباط با سرور' };
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return { success: false, message: error.response?.data?.message ?? error.message ?? 'خطا در ارتباط با سرور' };
+    }
+    return { success: false, message: 'خطا در ارتباط با سرور' };
   }
 }

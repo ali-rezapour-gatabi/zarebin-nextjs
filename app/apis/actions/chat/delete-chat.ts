@@ -1,25 +1,22 @@
 'use server';
-import { api } from '@/lib/baseUrl';
+
 import axios from 'axios';
 import { cookies } from 'next/headers';
+import { serverRequest } from '@/lib/api.server';
 
-export default async function createChatAction({ title }: { title: string }) {
+export default async function deleteChatAction({ chatId }: { chatId: string }) {
   const cookieStore = await cookies();
-  const token = cookieStore.get('token');
+  const token = cookieStore.get('access');
 
   if (!token) {
     return { success: false, message: 'برای دسترسی به این صفحه لازم است وارد شوید' };
   }
   try {
-    const response = await api.post(
-      'chat/create-chat-tab',
-      { title },
-      {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      },
-    );
+    const response = await serverRequest<{ success: boolean; slug?: string }>({
+      method: 'POST',
+      url: 'chat/delete-chat-tab',
+      data: { id: chatId },
+    });
     return {
       success: response.data.success,
       data: response.data.slug,

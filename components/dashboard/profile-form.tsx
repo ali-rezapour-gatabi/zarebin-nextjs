@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { updateUserAction } from '@/app/apis/actions/update-user';
+import { updateUserAction } from '@/app/apis/actions/dashboard/update-user';
 import { useUserStore } from '@/store/user';
 import { useShallow } from 'zustand/react/shallow';
 import type { ProfileData } from '@/store/user';
@@ -58,6 +58,7 @@ export function ProfileForm() {
     setAvatarPreview(profile?.avatar ?? '');
   }, [profile, reset]);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const avatarFile = watch('avatar');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const avatarRegister = register('avatar');

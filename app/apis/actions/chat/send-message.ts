@@ -1,28 +1,26 @@
 'use server';
-import { api } from '@/lib/baseUrl';
 import axios from 'axios';
 import { cookies } from 'next/headers';
+import { serverRequest } from '@/lib/api.server';
 
-export default async function getConversationsAction(slug: string) {
+export default async function sendMessageAction({ message, chatTabId }: { message: string; chatTabId: string | null }) {
   const cookieStore = await cookies();
-  const token = cookieStore.get('token');
+  const token = cookieStore.get('access');
 
   if (!token) {
     return { success: false, message: 'برای دسترسی به این صفحه لازم است وارد شوید' };
   }
   try {
-    const response = await api.post(
-      'chat/get-conversations',
-      { slug },
-      {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      },
-    );
+    const response = await serverRequest<{ success: boolean; analysis?: unknown; experts?: unknown }>({
+      method: 'POST',
+      url: 'chat/send-message',
+      data: { message, chatTabId },
+    });
+
     return {
       success: response.data.success,
-      data: response.data.chats,
+      chat: response.data.analysis,
+      expertsList: response.data.experts,
     };
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

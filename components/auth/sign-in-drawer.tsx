@@ -10,8 +10,8 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } f
 import { Input } from '@/components/ui/input';
 import { useAppStore } from '@/store/app';
 import { useUserStore } from '@/store/user';
-import { SendOtp } from '@/app/apis/actions/send-code';
-import { SignInWithOtp } from '@/app/apis/actions/verify-code';
+import { SendOtp } from '@/app/apis/actions/authentication/send-code';
+import { SignInWithOtp } from '@/app/apis/actions/authentication/verify-code';
 import { setAccessToken } from '@/lib/auth-token';
 
 type FormValues = {

@@ -1,12 +1,18 @@
 'use server';
 
 import axios from 'axios';
-import { api } from '@/lib/baseUrl';
+import { serverRequest } from '@/lib/api.server';
 
 export async function SendOtp(phone: string): Promise<{ success: boolean; message: string }> {
   try {
-    const response = await api.post('/users/identity/send-otp/', {
-      phone_number: phone,
+    const response = await serverRequest<{ success?: boolean; message?: string }>({
+      method: 'POST',
+      url: '/users/identity/send-otp/',
+      data: {
+        phone_number: phone,
+      },
+      skipAuth: true,
+      skipRefresh: true,
     });
 
     if (response.data?.success === false) {

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import { useAppStore } from '@/store/app';
-import axios from 'axios';
+import api from '@/lib/api.client';
 
 import { Toaster } from '@/components/ui/sonner';
 import { SiteHeader } from './site-header';
@@ -12,7 +12,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const res = await axios.get('/apis/auth');
+      const res = await api.get('/apis/auth', { baseURL: '', skipAuth: true, skipRefresh: true });
       setHasAuth(res.data.hasAuth);
     };
 

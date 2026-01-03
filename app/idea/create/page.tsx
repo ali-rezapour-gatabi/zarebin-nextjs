@@ -33,6 +33,7 @@ export default function CreateIdea() {
       commentsVisibility: true,
     },
   });
+  // eslint-disable-next-line react-hooks/incompatible-library
   const descriptionValue = watch('description') ?? '';
 
   const onSubmit = async (data: IdeaCreateFormValues) => {

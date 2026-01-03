@@ -1,20 +1,20 @@
 'use server';
-import { api } from '@/lib/baseUrl';
 import axios from 'axios';
 import { cookies } from 'next/headers';
+import { serverRequest } from '@/lib/api.server';
 
 export default async function getChatListAction() {
   const cookieStore = await cookies();
-  const token = cookieStore.get('token');
+  const token = cookieStore.get('access');
 
   if (!token) {
     return { success: false, message: 'برای دسترسی به این صفحه لازم است وارد شوید' };
   }
   try {
-    const response = await api.post('chat/get-chat-tabs', null, {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
+    const response = await serverRequest<{ success: boolean; chat?: unknown }>({
+      method: 'POST',
+      url: 'chat/get-chat-tabs',
+      data: null,
     });
     return {
       success: response.data.success,

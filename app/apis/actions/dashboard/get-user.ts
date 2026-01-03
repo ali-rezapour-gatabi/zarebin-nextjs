@@ -1,21 +1,25 @@
 'use server';
-import { api } from '@/lib/baseUrl';
+
 import axios from 'axios';
 import { cookies } from 'next/headers';
+import { serverRequest } from '@/lib/api.server';
 
-export default async function expertGetAction() {
+export async function getUserAction(): Promise<{ success: boolean; message: string; data?: unknown }> {
   const cookieStore = await cookies();
-  const token = cookieStore.get('token');
+  const token = cookieStore.get('access');
 
   if (!token) {
-    return { success: false, message: 'برای دسترسی به این صفحه لازم است وارد شوید' };
+    return {
+      success: false,
+      message: 'برای مشاهده این بخش لازم است وارد شوید',
+    };
   }
 
   try {
-    const response = await api.post('/identity/get-expert', null, {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
+    const response = await serverRequest<{ success?: boolean; message?: string; result?: unknown; data?: unknown }>({
+      method: 'POST',
+      url: '/users/identity/get/',
+      data: null,
     });
 
     if (response.data?.success === false) {
@@ -27,8 +31,8 @@ export default async function expertGetAction() {
 
     return {
       success: true,
-      message: response.data?.message ?? 'اطلاعات با موفقیت دریافت شد',
-      data: response.data?.result,
+      message: response.data?.message ?? 'اطلاعات با موفقیت ذخیره شد',
+      data: response.data?.result ?? response.data?.data,
     };
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -37,7 +41,6 @@ export default async function expertGetAction() {
         message: error.response?.data?.message ?? error.message ?? 'خطای غیرمنتظره‌ای رخ داد',
       };
     }
-
     return {
       success: false,
       message: 'خطای غیرمنتظره‌ای رخ داد',
